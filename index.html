@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://munai.club/">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="theme-color" content="#f2efe8">
+<meta name="theme-color" content="#f0f0f0">
 <meta name="color-scheme" content="light">
 
 <!-- Open Graph: Discord, iMessage, LinkedIn, Facebook -->
@@ -39,15 +39,15 @@
 <style>
   :root {
     /* Deliberately single-theme: the whole page is a sheet of paper.
-       One ink colour throughout. The logo is the only colour on the page. */
+       Neutral greys, no hue anywhere, so the logo is the only colour on the
+       page. The crumpled texture below carries the paper feeling on its own. */
     color-scheme: light;
-    --paper: #f2efe8;
-    --ink: #24221f;
-    /* Was #7a746b, which measured 4.03:1 on the paper and failed WCAG AA for
-       the small text it is used on (roles, eyebrow, blurb, url). Darkened the
-       same hue to 4.73:1. Visually near-identical, still clearly secondary. */
-    --ink-soft: #6f6960;
-    --hairline: rgba(36, 34, 31, 0.18);
+    --paper: #f0f0f0;
+    --ink: #222222;
+    /* 4.82:1 on the paper, so the small text using it (roles, eyebrow, blurb,
+       email, url) clears WCAG AA. */
+    --ink-soft: #696969;
+    --hairline: rgba(34, 34, 34, 0.18);
 
     /* Paper textures, baked as static images so nothing re-filters per frame. */
     --folds: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='3' seed='7'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='1.6'%3E%3CfeDistantLight azimuth='55' elevation='66'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='1200' height='1200' filter='url(%23f)'/%3E%3C/svg%3E");
@@ -100,10 +100,9 @@
     padding-inline: 20px;
     padding-block: clamp(80px, 14vh, 150px);
     position: relative;
-    /* The vignette belongs to each screen, not to the whole document, or it
-       lands at the top and bottom of the page instead of around each view. */
-    background-image: radial-gradient(ellipse at 50% 50%,
-      rgba(255,255,255,0) 45%, rgba(74, 62, 38, 0.13) 100%);
+    /* No vignette. One per section meant a dark band at every section edge,
+       which read as shadow patches stacked down the page. The only shadow on
+       the page now is the one under the cube. */
   }
 
   /* Only the opening screen fills the viewport. The rest are sized by their
@@ -183,12 +182,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #faf8f3;
+    background-color: #fafafa;
     background-image: var(--grain);
     background-size: 180px 180px;
     background-blend-mode: multiply;
     border: 2px solid var(--ink);
-    box-shadow: inset 0 0 40px rgba(60,50,30,0.12);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.10);
     backface-visibility: hidden;
     transition: box-shadow 0.45s ease;
   }
@@ -231,7 +230,7 @@
     height: calc(var(--size) * 0.18);
     margin-top: calc(var(--size) * 0.28);
     border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(30,27,22,0.22), transparent 70%);
+    background: radial-gradient(ellipse, rgba(0,0,0,0.20), transparent 70%);
     animation: breathe 3.5s ease-in-out infinite;
     /* width is safe to transition: 'breathe' only touches transform and opacity */
     /* transform, not width: width animated the flex layout on every hover
@@ -262,7 +261,7 @@
   .cube-link:hover .cube,
   .cube-link:focus-visible .cube { animation-duration: 5s; }
   .cube-link:hover .face,
-  .cube-link:focus-visible .face { box-shadow: inset 0 0 40px rgba(60,50,30,0.04); }
+  .cube-link:focus-visible .face { box-shadow: inset 0 0 40px rgba(0,0,0,0.03); }
   .cube-link:hover .shadow,
   .cube-link:focus-visible .shadow { transform: scaleX(0.8); }
   .cube-link:hover .cube-label,
