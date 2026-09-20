@@ -2,10 +2,36 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MUN AI Club</title>
-<meta name="description" content="MUN AI Club at Memorial University of Newfoundland. A student-led community for AI, machine learning and emerging technology.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland</title>
+<meta name="description" content="MUN AI Club is a student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning, open to beginners and builders alike.">
+<link rel="canonical" href="https://munai.club/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#f2efe8">
+<meta name="color-scheme" content="light">
+
+<!-- Open Graph: Discord, iMessage, LinkedIn, Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUN AI Club">
+<meta property="og:url" content="https://munai.club/">
+<meta property="og:title" content="MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland">
+<meta property="og:description" content="A student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning.">
+<meta property="og:image" content="https://munai.club/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MUN AI Club logo: a brain above an open book.">
+<meta property="og:locale" content="en_CA">
+
+<!-- X / Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland">
+<meta name="twitter:description" content="A student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning.">
+<meta name="twitter:image" content="https://munai.club/og-image.png">
+<meta name="twitter:image:alt" content="MUN AI Club logo: a brain above an open book.">
+
 <link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="logo.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +43,10 @@
     color-scheme: light;
     --paper: #f2efe8;
     --ink: #24221f;
-    --ink-soft: #7a746b;
+    /* Was #7a746b, which measured 4.03:1 on the paper and failed WCAG AA for
+       the small text it is used on (roles, eyebrow, blurb, url). Darkened the
+       same hue to 4.73:1. Visually near-identical, still clearly secondary. */
+    --ink-soft: #6f6960;
     --hairline: rgba(36, 34, 31, 0.18);
 
     /* Paper textures, baked as static images so nothing re-filters per frame. */
@@ -26,6 +55,21 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Section headings exist for structure and screen readers. The design has
+     never shown them, so they are removed visually, not from the document. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
 
   /* No scroll snapping anywhere. The page scrolls wherever you leave it. */
   html { scroll-behavior: smooth; }
@@ -159,17 +203,21 @@
        here made the browser re-composite the face against its backdrop, and a
        face swinging in edge-on dropped a frame: that was the blink. */
   }
-  .face .fallback {
-    display: none;
+  /* Shown only if logo.png fails to load. Drawn with CSS content rather than
+     six <span>AI</span> elements, which put the string "AI" into the document
+     six times over: crawlers read it as body copy and screen readers had six
+     stray nodes inside the Discord link. Generated content is invisible to
+     both, and the visual fallback is unchanged. */
+  .face.no-logo img { display: none; }
+  .face.no-logo::before {
+    content: 'AI';
     font-size: calc(var(--size) * 0.2);
     letter-spacing: 0.2em;
     text-indent: 0.2em;
     color: var(--ink);
-    z-index: 1;
     position: relative;
+    z-index: 1;
   }
-  .face.no-logo img { display: none; }
-  .face.no-logo .fallback { display: block; }
 
   .front  { transform: rotateY(0deg)   translateZ(calc(var(--size) / 2)); }
   .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
@@ -186,11 +234,14 @@
     background: radial-gradient(ellipse, rgba(30,27,22,0.22), transparent 70%);
     animation: breathe 3.5s ease-in-out infinite;
     /* width is safe to transition: 'breathe' only touches transform and opacity */
-    transition: width 0.45s cubic-bezier(.2,.9,.3,1.2);
+    /* transform, not width: width animated the flex layout on every hover
+       frame. The idle breathe uses the independent `scale` property so the
+       two compose instead of overwriting each other. */
+    transition: transform 0.45s cubic-bezier(.2,.9,.3,1.2);
   }
   @keyframes breathe {
-    0%, 100% { transform: scaleX(1); opacity: 0.9; }
-    50% { transform: scaleX(0.85); opacity: 0.6; }
+    0%, 100% { scale: 1 1; opacity: 0.9; }
+    50% { scale: 0.85 1; opacity: 0.6; }
   }
 
   .cube-label {
@@ -213,7 +264,7 @@
   .cube-link:hover .face,
   .cube-link:focus-visible .face { box-shadow: inset 0 0 40px rgba(60,50,30,0.04); }
   .cube-link:hover .shadow,
-  .cube-link:focus-visible .shadow { width: calc(var(--size) * 0.8); }
+  .cube-link:focus-visible .shadow { transform: scaleX(0.8); }
   .cube-link:hover .cube-label,
   .cube-link:focus-visible .cube-label { opacity: 1; transform: translateY(0); }
 
@@ -226,7 +277,8 @@
   /* ---------- Scroll hint ---------- */
   .scroll-hint {
     position: absolute;
-    bottom: clamp(20px, 5vh, 48px);
+    /* Clear the iOS home indicator, which otherwise sits over this. */
+    bottom: calc(clamp(20px, 5vh, 48px) + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -447,6 +499,12 @@
   @media (prefers-reduced-motion: reduce) {
     .cube { animation-duration: 60s; }
     .cube-link:hover .cube, .cube-link:focus-visible .cube { animation-duration: 60s; }
+    /* The entrance translates and scales the cube, so it goes. Its fill is
+       'backwards', so dropping it leaves the cube at its natural resting
+       state rather than stuck invisible. */
+    .stage { animation: none; }
+    /* The h1 and scroll cue fade only, no movement, so those stay: removing
+       them would leave both parked at opacity 0. */
     .shadow, .scroll-hint .rule { animation: none; }
     .stage, .shadow, .cube-label, .face { transition: none; }
     .arrow { opacity: 0.75; stroke-dashoffset: 0; }
@@ -456,35 +514,37 @@
 </style>
 </head>
 <body>
+<main>
 
 <!-- ================= HERO ================= -->
-<section id="hero">
-  <h1>MUN AI Club</h1>
+<section id="hero" aria-labelledby="hero-heading">
+  <h1 id="hero-heading">MUN AI Club</h1>
 
   <a class="cube-link" href="https://discord.gg/J4DZKTrsYd" target="_blank" rel="noopener noreferrer"
      aria-label="Join the MUN AI Club Discord">
     <div class="stage">
       <div class="cube">
-        <div class="face front"><img src="logo.png" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face back"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face right"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face left"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face top"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face bottom"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face front"><img src="logo.png" width="512" height="512" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face back"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face right"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face left"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face top"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face bottom"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
       </div>
     </div>
     <div class="shadow" aria-hidden="true"></div>
     <span class="cube-label">Join the Discord</span>
   </a>
 
-  <a class="scroll-hint" href="#about">
+  <a class="scroll-hint" href="#about" aria-label="Scroll to club information">
     Scroll
     <span class="rule" aria-hidden="true"></span>
   </a>
 </section>
 
 <!-- ================= LEADERSHIP + ABOUT ================= -->
-<section id="about">
+<section id="about" aria-labelledby="about-heading">
+  <h2 id="about-heading" class="sr-only">About MUN AI Club</h2>
   <div class="panel">
     <ul class="people">
       <li>
@@ -504,7 +564,8 @@
 </section>
 
 <!-- ================= DISCORD ================= -->
-<section id="discord">
+<section id="discord" aria-labelledby="join-heading">
+  <h2 id="join-heading" class="sr-only">Join the MUN AI Club Discord</h2>
   <div class="arrows-wrap">
     <svg class="arrows" viewBox="0 0 760 620" aria-hidden="true">
       <!-- Arrows are generated by the script below, all pointing at the centre -->
@@ -522,6 +583,25 @@
     </div>
   </div>
 </section>
+
+</main>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "MUN AI Club",
+  "url": "https://munai.club/",
+  "logo": "https://munai.club/logo.png",
+  "image": "https://munai.club/og-image.png",
+  "description": "MUN AI Club is a student-led community for anyone interested in artificial intelligence, machine learning, and emerging technology, based at Memorial University of Newfoundland.",
+  "sameAs": ["https://discord.gg/J4DZKTrsYd"],
+  "member": [
+    { "@type": "Person", "name": "Aynur Sunagatullin", "jobTitle": "President" },
+    { "@type": "Person", "name": "Ivan Haievy", "jobTitle": "Vice President" }
+  ]
+}
+</script>
 
 <script>
   // Build thin arrows around the button, all pointing inward.
@@ -622,7 +702,8 @@
 
     // Draw the arrows in when the section scrolls into view
     const section = document.getElementById('discord');
-    const reveal = () => section.classList.add('in-view');
+    let safety;
+    const reveal = () => { clearTimeout(safety); section.classList.add('in-view'); };
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
@@ -630,8 +711,9 @@
         });
       }, { threshold: 0.35 });
       io.observe(section);
-      // Safety net: never leave the arrows invisible if the observer never fires.
-      setTimeout(reveal, 6000);
+      // Safety net: never leave the arrows invisible if the observer never
+      // fires. Cleared once it has, so no stray timer is left pending.
+      safety = setTimeout(reveal, 6000);
     } else {
       reveal();
     }
