@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUN AI Club</title>
+<meta name="description" content="MUN AI Club at Memorial University of Newfoundland. Join us on Discord.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Deliberately single-theme: the whole page is a sheet of paper.
+       One ink colour throughout. The logo is the only colour on the page. */
+    color-scheme: light;
+    --paper: #f2efe8;
+    --ink: #24221f;
+    --ink-soft: #7a746b;
+    --hairline: rgba(36, 34, 31, 0.18);
+
+    /* Paper textures, baked as static images so nothing re-filters per frame. */
+    --folds: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='3' seed='7'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='1.6'%3E%3CfeDistantLight azimuth='55' elevation='66'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='1200' height='1200' filter='url(%23f)'/%3E%3C/svg%3E");
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='0.7'%3E%3CfeDistantLight azimuth='45' elevation='72'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+  }
+
+  /* ---------- Crumpled paper background ----------
+     Painted straight onto the body: no extra layer, no negative z-index. */
+  body {
+    color: var(--ink);
+    font-family: 'Jost', 'Avenir Next', 'Segoe UI', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 45%, rgba(74, 62, 38, 0.16) 100%),
+      var(--grain),
+      var(--folds);
+    background-size: 100% 100%, 180px 180px, 100% 100%;
+    background-repeat: no-repeat, repeat, no-repeat;
+    background-blend-mode: multiply, multiply, multiply;
+  }
+
+  /* ---------- Sections ---------- */
+  section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    position: relative;
+  }
+
+  /* ---------- Hero ---------- */
+  h1 {
+    font-size: clamp(0.95rem, 2.4vw, 1.3rem);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;         /* balances the trailing letter-space */
+    text-align: center;
+    color: var(--ink);
+    margin-bottom: clamp(48px, 9vh, 92px);
+    animation: fade 1s ease-out both;
+  }
+
+  @keyframes fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ---------- 3D Cube ---------- */
+  .stage {
+    --size: clamp(150px, 30vmin, 240px);
+    width: var(--size);
+    height: var(--size);
+    perspective: 900px;
+    animation: rise 1s 0.2s cubic-bezier(.2,.9,.3,1.2) both;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(30px) scale(0.8); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spin 14s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotateX(-20deg) rotateY(0deg); }
+    to   { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #faf8f3;
+    background-image: var(--grain);
+    background-size: 180px 180px;
+    background-blend-mode: multiply;
+    border: 2px solid var(--ink);
+    box-shadow: inset 0 0 40px rgba(60,50,30,0.12);
+    backface-visibility: hidden;
+    overflow: hidden;
+  }
+  .face img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 5%;
+    position: relative;
+    z-index: 1;
+    /* multiply drops the logo's white background into the paper */
+    mix-blend-mode: multiply;
+  }
+  .face .fallback {
+    display: none;
+    font-size: calc(var(--size) * 0.2);
+    letter-spacing: 0.2em;
+    text-indent: 0.2em;
+    color: var(--ink);
+    z-index: 1;
+    position: relative;
+  }
+  .face.no-logo img { display: none; }
+  .face.no-logo .fallback { display: block; }
+
+  .front  { transform: rotateY(0deg)   translateZ(calc(var(--size) / 2)); }
+  .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
+  .right  { transform: rotateY(90deg)  translateZ(calc(var(--size) / 2)); }
+  .left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
+  .top    { transform: rotateX(90deg)  translateZ(calc(var(--size) / 2)); }
+  .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
+
+  .shadow {
+    --size: clamp(150px, 30vmin, 240px);
+    width: var(--size);
+    height: calc(var(--size) * 0.18);
+    margin-top: calc(var(--size) * 0.28);
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(30,27,22,0.22), transparent 70%);
+    animation: breathe 3.5s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scaleX(1); opacity: 0.9; }
+    50% { transform: scaleX(0.85); opacity: 0.6; }
+  }
+
+  /* ---------- Scroll hint ---------- */
+  .scroll-hint {
+    position: absolute;
+    bottom: clamp(24px, 6vh, 56px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+    opacity: 0;
+    animation: fade 1.4s 3s ease-out forwards;
+  }
+  .scroll-hint .rule {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--hairline), var(--ink-soft));
+    animation: drop 1.8s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes drop {
+    0%, 100% { transform: scaleY(0.55); opacity: 0.5; }
+    50%      { transform: scaleY(1); opacity: 1; }
+  }
+  .scroll-hint:focus-visible { outline: 1px solid var(--ink); outline-offset: 6px; }
+
+  /* ---------- Discord section ---------- */
+  .discord-section { overflow: hidden; }
+
+  .arrows-wrap {
+    position: relative;
+    /* Tall and narrow on a phone, square on a desktop: the arrows need
+       whatever room the viewport actually has, not a square derived from width. */
+    width: min(96vw, 760px);
+    height: min(86vh, 760px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arrows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .arrow {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    opacity: 0;
+  }
+  .in-view .arrow {
+    animation: draw 0.8s ease-out forwards;
+  }
+  @keyframes draw {
+    to { stroke-dashoffset: 0; opacity: 0.75; }
+  }
+  /* The arrows draw in once and then hold still: no perpetual repaint. */
+
+  .join {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .join .eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+    color: var(--ink-soft);
+  }
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: inherit;
+    font-size: clamp(0.82rem, 2vw, 0.95rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    text-indent: 0.24em;
+    color: var(--ink);
+    background: transparent;
+    text-decoration: none;
+    padding: 20px 38px;
+    border: 1.5px solid var(--ink);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .discord-btn svg {
+    width: 1.35em;
+    height: 1.35em;
+    flex-shrink: 0;
+    fill: currentColor;
+    text-indent: 0;
+  }
+  .discord-btn:hover,
+  .discord-btn:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
+    outline: none;
+  }
+
+  .url {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    word-break: break-all;
+  }
+
+  /* On a phone the button must not span the full width, or the arrows
+     have nowhere to come from. */
+  @media (max-width: 560px) {
+    .discord-btn {
+      padding: 16px 22px;
+      letter-spacing: 0.16em;
+      text-indent: 0.16em;
+      gap: 10px;
+    }
+    .join { gap: 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cube { animation-duration: 60s; }
+    .shadow, .scroll-hint .rule { animation: none; }
+    .arrow { opacity: 0.75; stroke-dashoffset: 0; }
+    .in-view .arrow { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section id="hero">
+  <h1>MUN AI Club</h1>
+
+  <div class="stage" aria-label="Spinning cube with the MUN AI Club logo">
+    <div class="cube">
+      <div class="face front"><img src="logo.webp" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+      <div class="face back"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+      <div class="face right"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+      <div class="face left"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+      <div class="face top"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+      <div class="face bottom"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+    </div>
+  </div>
+  <div class="shadow" aria-hidden="true"></div>
+
+  <a class="scroll-hint" href="#discord">
+    Scroll
+    <span class="rule" aria-hidden="true"></span>
+  </a>
+</section>
+
+<!-- ================= DISCORD ================= -->
+<section id="discord" class="discord-section">
+  <div class="arrows-wrap">
+    <svg class="arrows" viewBox="0 0 760 760" aria-hidden="true">
+      <!-- Arrows are generated by the script below, all pointing at the centre -->
+    </svg>
+
+    <div class="join">
+      <span class="eyebrow">Come hang out</span>
+      <a class="discord-btn" href="https://discord.gg/J4DZKTrsYd" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+        <span>Join the Discord</span>
+      </a>
+      <span class="url">discord.gg/J4DZKTrsYd</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Build thin arrows around the button, all pointing inward.
+  function drawArrows() {
+    const svg = document.querySelector('.arrows');
+    const wrap = document.querySelector('.arrows-wrap');
+    const join = document.querySelector('.join');
+    const NS = 'http://www.w3.org/2000/svg';
+    const count = 12;
+
+    svg.textContent = '';
+
+    // Work in real pixels: the viewBox tracks the wrapper, so nothing is
+    // distorted when the box is tall and narrow on a phone.
+    const wr = wrap.getBoundingClientRect();
+    const jr = join.getBoundingClientRect();
+    const W = Math.round(wr.width), H = Math.round(wr.height);
+    if (!W || !H) return;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const cx = W / 2, cy = H / 2;
+
+    // The target is the whole join block, not a circle, so the tips stop just
+    // outside the button instead of landing under it.
+    const gap = 30;
+    const rx = jr.width / 2 + gap;
+    const ry = jr.height / 2 + gap;
+
+    // simple seeded random so the layout is stable on reload
+    let seed = 42;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + (rnd() - 0.5) * 0.3;
+      const ca = Math.cos(angle), sa = Math.sin(angle);
+
+      // distance from centre to the target ellipse along this ray
+      const inner = 1 / Math.hypot(ca / rx, sa / ry);
+      // start outside that, staying within the wrapper's own box
+      const maxOut = 1 / Math.hypot(ca / (W / 2 - 4), sa / (H / 2 - 4));
+      const outer = Math.min(inner + 100 + rnd() * 55, maxOut);
+      // an arrow shorter than its own head reads as a stub, so drop it
+      if (outer - inner < 74) continue;
+
+      const x1 = cx + ca * outer, y1 = cy + sa * outer;
+      const x2 = cx + ca * inner, y2 = cy + sa * inner;
+
+      // a barely-curved shaft: enough to look drawn, not enough to look busy
+      const bend = (rnd() - 0.5) * 26;
+      const mx = (x1 + x2) / 2 + Math.cos(angle + Math.PI / 2) * bend;
+      const my = (y1 + y2) / 2 + Math.sin(angle + Math.PI / 2) * bend;
+
+      // tangent direction at the tip (from control point to tip)
+      const tdx = x2 - mx, tdy = y2 - my;
+      const tlen = Math.hypot(tdx, tdy) || 1;
+      const ux = tdx / tlen, uy = tdy / tlen;
+      const headLen = 13 + rnd() * 4;
+      const spread = 0.42;
+      const hx1 = x2 - (ux * Math.cos(spread) - uy * Math.sin(spread)) * headLen;
+      const hy1 = y2 - (uy * Math.cos(spread) + ux * Math.sin(spread)) * headLen;
+      const hx2 = x2 - (ux * Math.cos(-spread) - uy * Math.sin(-spread)) * headLen;
+      const hy2 = y2 - (uy * Math.cos(-spread) + ux * Math.sin(-spread)) * headLen;
+
+      const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)} ` +
+                `M ${hx1.toFixed(1)} ${hy1.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)} L ${hx2.toFixed(1)} ${hy2.toFixed(1)}`;
+
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', 'arrow');
+      path.style.animationDelay = `${(i * 0.06).toFixed(2)}s`;
+      svg.appendChild(path);
+    }
+  }
+
+  (function () {
+    drawArrows();
+
+    // Re-aim the arrows when the button's box changes size.
+    let t;
+    window.addEventListener('resize', () => {
+      clearTimeout(t);
+      t = setTimeout(drawArrows, 150);
+    });
+    // Web fonts change the button's width, so redraw once they land.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(drawArrows);
+    }
+
+    // Draw the arrows in when the section scrolls into view
+    const section = document.getElementById('discord');
+    const reveal = () => section.classList.add('in-view');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { reveal(); io.disconnect(); }
+        });
+      }, { threshold: 0.35 });
+      io.observe(section);
+      // Safety net: never leave the arrows invisible if the observer never fires.
+      setTimeout(reveal, 6000);
+    } else {
+      reveal();
+    }
+  })();
+</script>
+</body>
+</html>

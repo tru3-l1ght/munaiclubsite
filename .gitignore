@@ -1,0 +1,5 @@
+# Local preview config, not part of the site
+.claude/
+
+# Body-only copy used for publishing a preview elsewhere
+artifact.html
