@@ -29,6 +29,12 @@
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
   }
+  /* A phone's address bar collapses while you scroll, which changes the
+     viewport height mid-gesture. Mandatory snap then yanks the page back.
+     Proximity still settles on a screen without fighting the scroll. */
+  @media (pointer: coarse) {
+    html { scroll-snap-type: y proximity; }
+  }
 
   /* ---------- Crumpled paper background ----------
      Painted straight onto the body: no extra layer, no negative z-index. */
@@ -39,13 +45,12 @@
     overflow-x: hidden;
     min-height: 100vh;
     background-color: var(--paper);
-    background-image:
-      radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 45%, rgba(74, 62, 38, 0.16) 100%),
-      var(--grain),
-      var(--folds);
-    background-size: 100% 100%, 180px 180px, 100% 100%;
-    background-repeat: no-repeat, repeat, no-repeat;
-    background-blend-mode: multiply, multiply, multiply;
+    background-image: var(--grain), var(--folds);
+    /* cover, not 100% 100%: the folds image is square, and stretching it over a
+       tall phone document smeared the creases into vertical streaks. */
+    background-size: 180px 180px, cover;
+    background-repeat: repeat, no-repeat;
+    background-blend-mode: multiply, multiply;
   }
 
   /* ---------- Sections ---------- */
@@ -59,6 +64,10 @@
     justify-content: center;
     padding: 24px 16px;
     position: relative;
+    /* The vignette belongs to each screen, not to the whole document, or it
+       lands at the top and bottom of the page instead of around each view. */
+    background-image: radial-gradient(ellipse at 50% 50%,
+      rgba(255,255,255,0) 45%, rgba(74, 62, 38, 0.15) 100%);
   }
 
   /* ---------- Hero ---------- */
@@ -299,6 +308,27 @@
     .join { gap: 18px; }
   }
 
+  /* A phone held sideways has very little height. Without this the scroll cue
+     is pinned to the bottom edge and lands on top of the cube. */
+  @media (max-height: 520px) {
+    h1 {
+      font-size: 0.82rem;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      margin-bottom: 20px;
+    }
+    .stage, .shadow { --size: clamp(104px, 34vh, 150px); }
+    .shadow { margin-top: calc(var(--size) * 0.18); }
+    .scroll-hint {
+      position: static;
+      transform: none;
+      margin-top: 20px;
+      gap: 8px;
+    }
+    .scroll-hint .rule { height: 20px; }
+    .arrows-wrap { height: min(94vh, 760px); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cube { animation-duration: 60s; }
     .shadow, .scroll-hint .rule { animation: none; }
@@ -374,9 +404,12 @@
 
     // The target is the whole join block, not a circle, so the tips stop just
     // outside the button instead of landing under it.
-    const gap = 30;
+    // Clearance shrinks on a small screen, otherwise a sideways phone has no
+    // vertical room left and every arrow gets discarded as too short.
+    const gap = Math.max(14, Math.min(30, Math.min(W, H) * 0.06));
     const rx = jr.width / 2 + gap;
     const ry = jr.height / 2 + gap;
+    const minLen = 50;
 
     // simple seeded random so the layout is stable on reload
     let seed = 42;
@@ -392,7 +425,8 @@
       const maxOut = 1 / Math.hypot(ca / (W / 2 - 4), sa / (H / 2 - 4));
       const outer = Math.min(inner + 100 + rnd() * 55, maxOut);
       // an arrow shorter than its own head reads as a stub, so drop it
-      if (outer - inner < 74) continue;
+      const shaft = outer - inner;
+      if (shaft < minLen) continue;
 
       const x1 = cx + ca * outer, y1 = cy + sa * outer;
       const x2 = cx + ca * inner, y2 = cy + sa * inner;
@@ -406,7 +440,8 @@
       const tdx = x2 - mx, tdy = y2 - my;
       const tlen = Math.hypot(tdx, tdy) || 1;
       const ux = tdx / tlen, uy = tdy / tlen;
-      const headLen = 13 + rnd() * 4;
+      // keep the head in proportion when the shaft is short
+      const headLen = Math.min(13 + rnd() * 4, shaft * 0.34);
       const spread = 0.42;
       const hx1 = x2 - (ux * Math.cos(spread) - uy * Math.sin(spread)) * headLen;
       const hy1 = y2 - (uy * Math.cos(spread) + ux * Math.sin(spread)) * headLen;
