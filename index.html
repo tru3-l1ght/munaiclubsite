@@ -143,7 +143,6 @@
     border: 2px solid var(--ink);
     box-shadow: inset 0 0 40px rgba(60,50,30,0.12);
     backface-visibility: hidden;
-    overflow: hidden;
     transition: box-shadow 0.45s ease;
   }
   .face img {
@@ -153,8 +152,9 @@
     padding: 5%;
     position: relative;
     z-index: 1;
-    /* multiply drops the logo's white background into the paper */
-    mix-blend-mode: multiply;
+    /* The logo's background is keyed out in the file itself. A mix-blend-mode
+       here made the browser re-composite the face against its backdrop, and a
+       face swinging in edge-on dropped a frame: that was the blink. */
   }
   .face .fallback {
     display: none;
@@ -454,12 +454,12 @@
      aria-label="Join the MUN AI Club Discord">
     <div class="stage">
       <div class="cube">
-        <div class="face front"><img src="logo.webp" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face back"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face right"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face left"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face top"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
-        <div class="face bottom"><img src="logo.webp" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face front"><img src="logo.png" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face back"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face right"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face left"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face top"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
+        <div class="face bottom"><img src="logo.png" alt="" onerror="this.parentElement.classList.add('no-logo')"><span class="fallback">AI</span></div>
       </div>
     </div>
     <div class="shadow" aria-hidden="true"></div>
