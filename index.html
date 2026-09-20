@@ -342,6 +342,38 @@
     text-indent: 0.3em;
     color: var(--ink-soft);
   }
+  /* The president's title sits one step above the vice president's. */
+  .people .role-president { font-size: 0.74rem; }
+
+  /* Holds the two officers and the club address as one block, so the address
+     stays close to them instead of taking the panel's full section gap. */
+  .roster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .email {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.25s ease;
+    word-break: break-word;
+  }
+  .email:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .email:focus-visible {
+    color: var(--ink);
+    outline: 1px solid var(--ink);
+    outline-offset: 6px;
+  }
 
   .divider {
     width: 54px;
@@ -506,7 +538,7 @@
     /* The h1 and scroll cue fade only, no movement, so those stay: removing
        them would leave both parked at opacity 0. */
     .shadow, .scroll-hint .rule { animation: none; }
-    .stage, .shadow, .cube-label, .face { transition: none; }
+    .stage, .shadow, .cube-label, .face, .email { transition: none; }
     .arrow { opacity: 0.75; stroke-dashoffset: 0; }
     .in-view .arrow { animation: none; }
     html { scroll-behavior: auto; }
@@ -546,16 +578,19 @@
 <section id="about" aria-labelledby="about-heading">
   <h2 id="about-heading" class="sr-only">About MUN AI Club</h2>
   <div class="panel">
-    <ul class="people">
-      <li>
-        <span class="name">Aynur Sunagatullin</span>
-        <span class="role">President</span>
-      </li>
-      <li>
-        <span class="name">Ivan Haievy</span>
-        <span class="role">Vice President</span>
-      </li>
-    </ul>
+    <div class="roster">
+      <ul class="people">
+        <li>
+          <span class="name">Aynur Sunagatullin</span>
+          <span class="role role-president">President</span>
+        </li>
+        <li>
+          <span class="name">Ivan Haievy</span>
+          <span class="role">Vice President</span>
+        </li>
+      </ul>
+      <a class="email" href="mailto:memorialaiclub@gmail.com">memorialaiclub@gmail.com</a>
+    </div>
 
     <span class="divider" aria-hidden="true"></span>
 
@@ -592,6 +627,7 @@
   "@type": "Organization",
   "name": "MUN AI Club",
   "url": "https://munai.club/",
+  "email": "memorialaiclub@gmail.com",
   "logo": "https://munai.club/logo.png",
   "image": "https://munai.club/og-image.png",
   "description": "MUN AI Club is a student-led community for anyone interested in artificial intelligence, machine learning, and emerging technology, based at Memorial University of Newfoundland.",
