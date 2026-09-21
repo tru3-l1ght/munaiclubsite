@@ -195,7 +195,14 @@
     background-repeat: no-repeat, repeat;
     border: 2px solid var(--ink);
     box-shadow: inset 0 0 40px rgba(0,0,0,0.10);
-    backface-visibility: hidden;
+    /* No backface-visibility. It made the browser decide, every frame, whether
+       each face points away from the viewer. Firefox evaluates that against a
+       transform that lags the compositor-driven spin, so a face crossing the
+       threshold got culled for a frame or two just as it came into view: the
+       blink. The faces are opaque and form a closed cube, so depth sorting
+       hides the rear ones anyway and there is nothing to decide.
+       Verified in Firefox 156 across a dense sweep of angles through all three
+       crossings: identical to the culled version apart from edge antialiasing. */
     transition: box-shadow 0.45s ease;
   }
 
