@@ -179,43 +179,24 @@
   .face {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* Each face is ONE element painted from two plain raster layers: no child
+       <img>, no SVG-filter background, no blend mode.
+       Firefox re-rasterises an SVG-filter background image and a child <img>
+       inside a preserve-3d subtree whenever the projected size changes, which
+       is every frame of the spin. A face entering view goes from zero width
+       upward, so its first frames were re-rastered from scratch: that was the
+       blink. Chrome and Safari cache that raster, which is why only Firefox
+       showed it. Flat PNGs need no filter pass and no blending group.
+       paper-tile.png is the same grain, pre-multiplied over the face colour. */
     background-color: #fafafa;
-    background-image: var(--grain);
-    background-size: 180px 180px;
-    background-blend-mode: multiply;
+    background-image: url("logo.png"), url("paper-tile.png");
+    background-size: 90% auto, 180px 180px;
+    background-position: center center, 0 0;
+    background-repeat: no-repeat, repeat;
     border: 2px solid var(--ink);
     box-shadow: inset 0 0 40px rgba(0,0,0,0.10);
     backface-visibility: hidden;
     transition: box-shadow 0.45s ease;
-  }
-  .face img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 5%;
-    position: relative;
-    z-index: 1;
-    /* The logo's background is keyed out in the file itself. A mix-blend-mode
-       here made the browser re-composite the face against its backdrop, and a
-       face swinging in edge-on dropped a frame: that was the blink. */
-  }
-  /* Shown only if logo.png fails to load. Drawn with CSS content rather than
-     six <span>AI</span> elements, which put the string "AI" into the document
-     six times over: crawlers read it as body copy and screen readers had six
-     stray nodes inside the Discord link. Generated content is invisible to
-     both, and the visual fallback is unchanged. */
-  .face.no-logo img { display: none; }
-  .face.no-logo::before {
-    content: 'AI';
-    font-size: calc(var(--size) * 0.2);
-    letter-spacing: 0.2em;
-    text-indent: 0.2em;
-    color: var(--ink);
-    position: relative;
-    z-index: 1;
   }
 
   .front  { transform: rotateY(0deg)   translateZ(calc(var(--size) / 2)); }
@@ -555,12 +536,12 @@
      aria-label="Join the MUN AI Club Discord">
     <div class="stage">
       <div class="cube">
-        <div class="face front"><img src="logo.png" width="512" height="512" alt="MUN AI Club logo" onerror="this.parentElement.classList.add('no-logo')"></div>
-        <div class="face back"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
-        <div class="face right"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
-        <div class="face left"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
-        <div class="face top"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
-        <div class="face bottom"><img src="logo.png" width="512" height="512" alt="" aria-hidden="true" onerror="this.parentElement.classList.add('no-logo')"></div>
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face right"></div>
+        <div class="face left"></div>
+        <div class="face top"></div>
+        <div class="face bottom"></div>
       </div>
     </div>
     <div class="shadow" aria-hidden="true"></div>
