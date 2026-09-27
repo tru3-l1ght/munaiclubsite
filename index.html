@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland</title>
+<meta name="description" content="MUN AI Club is a student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning, open to beginners and builders alike.">
+<link rel="canonical" href="https://munai.club/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="theme-color" content="#f0f0f0">
+<meta name="color-scheme" content="light">
+
+<!-- Open Graph: Discord, iMessage, LinkedIn, Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MUN AI Club">
+<meta property="og:url" content="https://munai.club/">
+<meta property="og:title" content="MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland">
+<meta property="og:description" content="A student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning.">
+<meta property="og:image" content="https://munai.club/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MUN AI Club logo: a brain above an open book.">
+<meta property="og:locale" content="en_CA">
+
+<!-- X / Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MUN AI Club | Artificial Intelligence at Memorial University of Newfoundland">
+<meta name="twitter:description" content="A student-led artificial intelligence community at Memorial University of Newfoundland. Workshops, hands-on projects and events in AI and machine learning.">
+<meta name="twitter:image" content="https://munai.club/assets/og-image.png">
+<meta name="twitter:image:alt" content="MUN AI Club logo: a brain above an open book.">
+
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/logo.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=IBM+Plex+Mono:wght@300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Deliberately single-theme: the whole page is a sheet of paper.
+       Neutral greys, no hue anywhere, so the logo is the only colour on the
+       page. The crumpled texture below carries the paper feeling on its own. */
+    color-scheme: light;
+    --paper: #f0f0f0;
+    --ink: #222222;
+    /* 4.82:1 on the paper, so the small text using it (roles, eyebrow, blurb,
+       email, url) clears WCAG AA. */
+    --ink-soft: #696969;
+    --hairline: rgba(34, 34, 34, 0.18);
+
+    /* Paper textures, baked as static images so nothing re-filters per frame. */
+    --folds: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='3' seed='7'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='1.6'%3E%3CfeDistantLight azimuth='55' elevation='66'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='1200' height='1200' filter='url(%23f)'/%3E%3C/svg%3E");
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' seed='5' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23ffffff' surfaceScale='0.7'%3E%3CfeDistantLight azimuth='45' elevation='72'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Section headings exist for structure and screen readers. The design has
+     never shown them, so they are removed visually, not from the document. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* No scroll snapping anywhere. The page scrolls wherever you leave it. */
+  html { scroll-behavior: smooth; }
+
+  /* ---------- Crumpled paper background ----------
+     Painted straight onto the body: no extra layer, no negative z-index. */
+  body {
+    color: var(--ink);
+    font-family: 'Jost', 'Avenir Next', 'Segoe UI', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-color: var(--paper);
+    background-image: var(--grain), var(--folds);
+    /* cover, not 100% 100%: the folds image is square, and stretching it over a
+       tall phone document smeared the creases into vertical streaks. */
+    background-size: 180px 180px, cover;
+    background-repeat: repeat, no-repeat;
+    background-blend-mode: multiply, multiply;
+  }
+
+  /* ---------- Sections ---------- */
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 20px;
+    padding-block: clamp(80px, 14vh, 150px);
+    position: relative;
+    /* No vignette. One per section meant a dark band at every section edge,
+       which read as shadow patches stacked down the page. The only shadow on
+       the page now is the one under the cube. */
+  }
+
+  /* Only the opening screen fills the viewport. The rest are sized by their
+     content, so moving between them is an ordinary scroll. */
+  #hero {
+    min-height: 100vh;
+    /* svh, not dvh: dvh grows as a phone's address bar hides, so the hero
+       changed height mid-scroll, the document resized under you, and the page
+       jumped up and down near the bottom. svh is the stable small viewport. */
+    min-height: 100svh;
+    justify-content: center;
+    padding-block: clamp(56px, 10vh, 110px);
+  }
+
+  /* ---------- Hero ---------- */
+  h1 {
+    font-size: clamp(0.95rem, 2.4vw, 1.3rem);
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;         /* balances the trailing letter-space */
+    text-align: center;
+    color: var(--ink);
+    margin-bottom: clamp(40px, 8vh, 84px);
+    animation: fade 1s ease-out backwards;
+  }
+
+  @keyframes fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ---------- Clickable cube ---------- */
+  .cube-link {
+    --size: clamp(150px, 30vmin, 240px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cube-link:focus-visible {
+    outline: 1px solid var(--ink);
+    outline-offset: 14px;
+  }
+
+  .stage {
+    width: var(--size);
+    height: var(--size);
+    perspective: 900px;
+    /* 'backwards' rather than 'both': once the entrance finishes the element
+       goes back to its own styles, which leaves the hover transform free. */
+    animation: rise 1s 0.2s cubic-bezier(.2,.9,.3,1.2) backwards;
+    transition: transform 0.45s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(30px) scale(0.8); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spin 14s linear infinite;
+    transition: none;
+  }
+  @keyframes spin {
+    from { transform: rotateX(-20deg) rotateY(0deg); }
+    to   { transform: rotateX(-20deg) rotateY(360deg); }
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    /* Each face is ONE element painted from two plain raster layers: no child
+       <img>, no SVG-filter background, no blend mode.
+       Firefox re-rasterises an SVG-filter background image and a child <img>
+       inside a preserve-3d subtree whenever the projected size changes, which
+       is every frame of the spin. A face entering view goes from zero width
+       upward, so its first frames were re-rastered from scratch: that was the
+       blink. Chrome and Safari cache that raster, which is why only Firefox
+       showed it. Flat PNGs need no filter pass and no blending group.
+       paper-tile.png is the same grain, pre-multiplied over the face colour. */
+    background-color: #fafafa;
+    background-image: url("/assets/logo.png"), url("/assets/paper-tile.png");
+    background-size: 90% auto, 180px 180px;
+    background-position: center center, 0 0;
+    background-repeat: no-repeat, repeat;
+    border: 2px solid var(--ink);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.10);
+    /* No backface-visibility. It made the browser decide, every frame, whether
+       each face points away from the viewer. Firefox evaluates that against a
+       transform that lags the compositor-driven spin, so a face crossing the
+       threshold got culled for a frame or two just as it came into view: the
+       blink. The faces are opaque and form a closed cube, so depth sorting
+       hides the rear ones anyway and there is nothing to decide.
+       Verified in Firefox 156 across a dense sweep of angles through all three
+       crossings: identical to the culled version apart from edge antialiasing. */
+    transition: box-shadow 0.45s ease;
+  }
+
+  .front  { transform: rotateY(0deg)   translateZ(calc(var(--size) / 2)); }
+  .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
+  .right  { transform: rotateY(90deg)  translateZ(calc(var(--size) / 2)); }
+  .left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
+  .top    { transform: rotateX(90deg)  translateZ(calc(var(--size) / 2)); }
+  .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
+
+  .shadow {
+    width: var(--size);
+    height: calc(var(--size) * 0.18);
+    margin-top: calc(var(--size) * 0.28);
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.20), transparent 70%);
+    animation: breathe 3.5s ease-in-out infinite;
+    /* width is safe to transition: 'breathe' only touches transform and opacity */
+    /* transform, not width: width animated the flex layout on every hover
+       frame. The idle breathe uses the independent `scale` property so the
+       two compose instead of overwriting each other. */
+    transition: transform 0.45s cubic-bezier(.2,.9,.3,1.2);
+  }
+  @keyframes breathe {
+    0%, 100% { scale: 1 1; opacity: 0.9; }
+    50% { scale: 0.85 1; opacity: 0.6; }
+  }
+
+  .cube-label {
+    margin-top: 18px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  /* Lift, spin faster, tighten the shadow, show the label. */
+  .cube-link:hover .stage,
+  .cube-link:focus-visible .stage { transform: translateY(-10px) scale(1.05); }
+  .cube-link:hover .cube,
+  .cube-link:focus-visible .cube { animation-duration: 5s; }
+  .cube-link:hover .face,
+  .cube-link:focus-visible .face { box-shadow: inset 0 0 40px rgba(0,0,0,0.03); }
+  .cube-link:hover .shadow,
+  .cube-link:focus-visible .shadow { transform: scaleX(0.8); }
+  .cube-link:hover .cube-label,
+  .cube-link:focus-visible .cube-label { opacity: 1; transform: translateY(0); }
+
+  /* A touch screen has no hover, so the cube would look inert. Show the
+     label faintly instead, so it reads as something you can tap. */
+  @media (hover: none) {
+    .cube-label { opacity: 0.6; transform: none; }
+  }
+
+  /* ---------- Scroll hint ---------- */
+  .scroll-hint {
+    position: absolute;
+    /* Clear the iOS home indicator, which otherwise sits over this. */
+    bottom: calc(clamp(20px, 5vh, 48px) + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+    opacity: 0;
+    animation: fade 1.4s 3s ease-out forwards;
+  }
+  .scroll-hint .rule {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, var(--hairline), var(--ink-soft));
+    animation: drop 1.8s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes drop {
+    0%, 100% { transform: scaleY(0.55); opacity: 0.5; }
+    50%      { transform: scaleY(1); opacity: 1; }
+  }
+  .scroll-hint:focus-visible { outline: 1px solid var(--ink); outline-offset: 6px; }
+
+  /* ---------- Leadership and about ---------- */
+  .panel {
+    width: 100%;
+    max-width: 44rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(32px, 5vh, 52px);
+    text-align: center;
+  }
+
+  .people {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .people li {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .people .name {
+    font-size: clamp(1rem, 2.2vw, 1.15rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+  .people .role {
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    color: var(--ink-soft);
+  }
+  /* The president's title sits one step above the vice president's. */
+  .people .role-president { font-size: 0.74rem; }
+
+  /* Holds the two officers and the club address as one block, so the address
+     stays close to them instead of taking the panel's full section gap. */
+  .roster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .email {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.25s ease;
+    word-break: break-word;
+  }
+  .email:hover {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .email:focus-visible {
+    color: var(--ink);
+    outline: 1px solid var(--ink);
+    outline-offset: 6px;
+  }
+
+  .divider {
+    width: 54px;
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  .blurb {
+    font-size: clamp(0.98rem, 1.5vw, 1.08rem);
+    line-height: 1.85;
+    letter-spacing: 0.012em;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+
+  /* ---------- Discord section ---------- */
+  #discord { overflow: hidden; }
+
+  .arrows-wrap {
+    position: relative;
+    /* Tall and narrow on a phone, square on a desktop: the arrows need
+       whatever room the viewport actually has, not a square derived from width. */
+    width: min(96vw, 760px);
+    height: min(74vh, 620px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arrows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .arrow {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    opacity: 0;
+  }
+  .in-view .arrow {
+    animation: draw 0.8s ease-out forwards;
+  }
+  @keyframes draw {
+    to { stroke-dashoffset: 0; opacity: 0.75; }
+  }
+  /* The arrows draw in once and then hold still: no perpetual repaint. */
+
+  /* On a touch screen the draw-in was not worth it: the arrows are already
+     on screen by the time it runs, and any redraw restarts it. Just show
+     them, fully drawn, with no animation at all. */
+  @media (pointer: coarse) {
+    .arrow { opacity: 0.75; stroke-dashoffset: 0; }
+    .in-view .arrow { animation: none; }
+  }
+
+  .join {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+  }
+  .join .eyebrow {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+    color: var(--ink-soft);
+  }
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: inherit;
+    font-size: clamp(0.82rem, 2vw, 0.95rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    text-indent: 0.24em;
+    color: var(--ink);
+    background: transparent;
+    text-decoration: none;
+    padding: 20px 38px;
+    border: 1.5px solid var(--ink);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .discord-btn svg {
+    width: 1.35em;
+    height: 1.35em;
+    flex-shrink: 0;
+    fill: currentColor;
+    text-indent: 0;
+  }
+  .discord-btn:hover,
+  .discord-btn:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
+    outline: none;
+  }
+
+  .url {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-weight: 300;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    word-break: break-all;
+  }
+
+  /* On a phone the button must not span the full width, or the arrows
+     have nowhere to come from. */
+  @media (max-width: 560px) {
+    .discord-btn {
+      padding: 16px 22px;
+      letter-spacing: 0.16em;
+      text-indent: 0.16em;
+      gap: 10px;
+    }
+    .join { gap: 18px; }
+    .blurb { line-height: 1.8; }
+  }
+
+  /* A phone held sideways has very little height. Without this the scroll cue
+     is pinned to the bottom edge and lands on top of the cube. */
+  @media (max-height: 520px) {
+    h1 {
+      font-size: 0.82rem;
+      letter-spacing: 0.3em;
+      text-indent: 0.3em;
+      margin-bottom: 20px;
+    }
+    .cube-link { --size: clamp(104px, 34vh, 150px); }
+    .shadow { margin-top: calc(var(--size) * 0.18); }
+    .cube-label { margin-top: 12px; }
+    .scroll-hint {
+      position: static;
+      transform: none;
+      margin-top: 18px;
+      gap: 8px;
+    }
+    .scroll-hint .rule { height: 18px; }
+    .arrows-wrap { height: min(94vh, 620px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cube { animation-duration: 60s; }
+    .cube-link:hover .cube, .cube-link:focus-visible .cube { animation-duration: 60s; }
+    /* The entrance translates and scales the cube, so it goes. Its fill is
+       'backwards', so dropping it leaves the cube at its natural resting
+       state rather than stuck invisible. */
+    .stage { animation: none; }
+    /* The h1 and scroll cue fade only, no movement, so those stay: removing
+       them would leave both parked at opacity 0. */
+    .shadow, .scroll-hint .rule { animation: none; }
+    .stage, .shadow, .cube-label, .face, .email { transition: none; }
+    .arrow { opacity: 0.75; stroke-dashoffset: 0; }
+    .in-view .arrow { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<!-- ================= HERO ================= -->
+<section id="hero" aria-labelledby="hero-heading">
+  <h1 id="hero-heading">MUN AI Club</h1>
+
+  <a class="cube-link" href="https://discord.gg/J4DZKTrsYd" target="_blank" rel="noopener noreferrer"
+     aria-label="Join the MUN AI Club Discord">
+    <div class="stage">
+      <div class="cube">
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face right"></div>
+        <div class="face left"></div>
+        <div class="face top"></div>
+        <div class="face bottom"></div>
+      </div>
+    </div>
+    <div class="shadow" aria-hidden="true"></div>
+    <span class="cube-label">Join the Discord</span>
+  </a>
+
+  <a class="scroll-hint" href="#about" aria-label="Scroll to club information">
+    Scroll
+    <span class="rule" aria-hidden="true"></span>
+  </a>
+</section>
+
+<!-- ================= LEADERSHIP + ABOUT ================= -->
+<section id="about" aria-labelledby="about-heading">
+  <h2 id="about-heading" class="sr-only">About MUN AI Club</h2>
+  <div class="panel">
+    <div class="roster">
+      <ul class="people">
+        <li>
+          <span class="name">Aynur Sunagatullin</span>
+          <span class="role role-president">President</span>
+        </li>
+        <li>
+          <span class="name">Ivan Haievy</span>
+          <span class="role">Vice President</span>
+        </li>
+      </ul>
+      <a class="email" href="mailto:memorialaiclub@gmail.com">memorialaiclub@gmail.com</a>
+    </div>
+
+    <span class="divider" aria-hidden="true"></span>
+
+    <p class="blurb">MUN AI Club is a student-led community for anyone interested in artificial intelligence, machine learning, and emerging technology. We bring students together through workshops, hands-on projects, discussions, and events that make AI more accessible, practical, and useful. Whether you&rsquo;re a complete beginner or already building with AI, the club is a place to learn, collaborate, and explore what&rsquo;s next.</p>
+  </div>
+</section>
+
+<!-- ================= DISCORD ================= -->
+<section id="discord" aria-labelledby="join-heading">
+  <h2 id="join-heading" class="sr-only">Join the MUN AI Club Discord</h2>
+  <div class="arrows-wrap">
+    <svg class="arrows" viewBox="0 0 760 620" aria-hidden="true">
+      <!-- Arrows are generated by the script below, all pointing at the centre -->
+    </svg>
+
+    <div class="join">
+      <span class="eyebrow">Come hang out</span>
+      <a class="discord-btn" href="https://discord.gg/J4DZKTrsYd" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 127.14 96.36" aria-hidden="true">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+        <span>Join the Discord</span>
+      </a>
+      <span class="url">discord.gg/J4DZKTrsYd</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "MUN AI Club",
+  "url": "https://munai.club/",
+  "email": "memorialaiclub@gmail.com",
+  "logo": "https://munai.club/assets/logo.png",
+  "image": "https://munai.club/assets/og-image.png",
+  "description": "MUN AI Club is a student-led community for anyone interested in artificial intelligence, machine learning, and emerging technology, based at Memorial University of Newfoundland.",
+  "sameAs": ["https://discord.gg/J4DZKTrsYd"],
+  "member": [
+    { "@type": "Person", "name": "Aynur Sunagatullin", "jobTitle": "President" },
+    { "@type": "Person", "name": "Ivan Haievy", "jobTitle": "Vice President" }
+  ]
+}
+</script>
+
+<script>
+  // Build thin arrows around the button, all pointing inward.
+  function drawArrows() {
+    const svg = document.querySelector('.arrows');
+    const wrap = document.querySelector('.arrows-wrap');
+    const join = document.querySelector('.join');
+    const NS = 'http://www.w3.org/2000/svg';
+    const count = 12;
+
+    svg.textContent = '';
+
+    // Work in real pixels: the viewBox tracks the wrapper, so nothing is
+    // distorted when the box is tall and narrow on a phone.
+    const wr = wrap.getBoundingClientRect();
+    const jr = join.getBoundingClientRect();
+    const W = Math.round(wr.width), H = Math.round(wr.height);
+    if (!W || !H) return;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const cx = W / 2, cy = H / 2;
+
+    // The target is the whole join block, not a circle, so the tips stop just
+    // outside the button instead of landing under it. Clearance shrinks on a
+    // small screen, otherwise a sideways phone has no vertical room left and
+    // every arrow gets discarded as too short.
+    const gap = Math.max(14, Math.min(30, Math.min(W, H) * 0.06));
+    const rx = jr.width / 2 + gap;
+    const ry = jr.height / 2 + gap;
+    const minLen = 50;
+
+    // simple seeded random so the layout is stable on reload
+    let seed = 42;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 + (rnd() - 0.5) * 0.3;
+      const ca = Math.cos(angle), sa = Math.sin(angle);
+
+      // distance from centre to the target ellipse along this ray
+      const inner = 1 / Math.hypot(ca / rx, sa / ry);
+      // start outside that, staying within the wrapper's own box
+      const maxOut = 1 / Math.hypot(ca / (W / 2 - 4), sa / (H / 2 - 4));
+      const outer = Math.min(inner + 100 + rnd() * 55, maxOut);
+      // an arrow shorter than its own head reads as a stub, so drop it
+      const shaft = outer - inner;
+      if (shaft < minLen) continue;
+
+      const x1 = cx + ca * outer, y1 = cy + sa * outer;
+      const x2 = cx + ca * inner, y2 = cy + sa * inner;
+
+      // a barely-curved shaft: enough to look drawn, not enough to look busy
+      const bend = (rnd() - 0.5) * 26;
+      const mx = (x1 + x2) / 2 + Math.cos(angle + Math.PI / 2) * bend;
+      const my = (y1 + y2) / 2 + Math.sin(angle + Math.PI / 2) * bend;
+
+      // tangent direction at the tip (from control point to tip)
+      const tdx = x2 - mx, tdy = y2 - my;
+      const tlen = Math.hypot(tdx, tdy) || 1;
+      const ux = tdx / tlen, uy = tdy / tlen;
+      // keep the head in proportion when the shaft is short
+      const headLen = Math.min(13 + rnd() * 4, shaft * 0.34);
+      const spread = 0.42;
+      const hx1 = x2 - (ux * Math.cos(spread) - uy * Math.sin(spread)) * headLen;
+      const hy1 = y2 - (uy * Math.cos(spread) + ux * Math.sin(spread)) * headLen;
+      const hx2 = x2 - (ux * Math.cos(-spread) - uy * Math.sin(-spread)) * headLen;
+      const hy2 = y2 - (uy * Math.cos(-spread) + ux * Math.sin(-spread)) * headLen;
+
+      const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)} ` +
+                `M ${hx1.toFixed(1)} ${hy1.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)} L ${hx2.toFixed(1)} ${hy2.toFixed(1)}`;
+
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', 'arrow');
+      path.style.animationDelay = `${(i * 0.06).toFixed(2)}s`;
+      svg.appendChild(path);
+    }
+  }
+
+  (function () {
+    drawArrows();
+
+    // Re-aim the arrows when the button's box changes size.
+    let t;
+    let lastW = window.innerWidth;
+    window.addEventListener('resize', () => {
+      // A phone fires resize every time the address bar hides, with the width
+      // unchanged. Redrawing there restarted the arrows in the middle of a
+      // scroll, which is what made them look glitchy. Width is what matters.
+      if (window.innerWidth === lastW) return;
+      lastW = window.innerWidth;
+      clearTimeout(t);
+      t = setTimeout(drawArrows, 150);
+    });
+    // Web fonts change the button's width, so redraw once they land.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(drawArrows);
+    }
+
+    // Draw the arrows in when the section scrolls into view
+    const section = document.getElementById('discord');
+    let safety;
+    const reveal = () => { clearTimeout(safety); section.classList.add('in-view'); };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { reveal(); io.disconnect(); }
+        });
+      }, { threshold: 0.35 });
+      io.observe(section);
+      // Safety net: never leave the arrows invisible if the observer never
+      // fires. Cleared once it has, so no stray timer is left pending.
+      safety = setTimeout(reveal, 6000);
+    } else {
+      reveal();
+    }
+  })();
+</script>
+</body>
+</html>
